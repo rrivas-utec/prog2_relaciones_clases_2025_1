@@ -36,7 +36,7 @@ class Course {
     std::string id;
     std::string name;
 public:
-    Course(std::string id, std::string name);
+    Course(const std::string& id, const std::string& name);
     std::string get_id();
     std::string get_name();
 };

@@ -4,6 +4,10 @@
 
 #include "matricula.h"
 
+#include <algorithm>
+#include <iostream>
+#include <ostream>
+
 Professor::Professor(const std::string& id, const std::string& name):id(id), name(name){
     // this->id = id;
     // this->name = name;
@@ -33,7 +37,7 @@ std::string Student::get_name() {
     return name;
 }
 
-Course::Course(std::string id, std::string name):id(id), name(name) { }
+Course::Course(const std::string& id, const std::string& name):id(id), name(name) { }
 
 std::string Course::get_id() {
     return id;
@@ -64,20 +68,53 @@ void Section::enroll(Student student) {
     list_student.push_back(new Student(std::move(student)));
 }
 
+// void Section::retire(const std::string &id_student) {
+//     // Lambda
+//     auto verify_student = [id_student](Student &student) {
+//         return student.get_id() == id_student;
+//     };
+//
+//     // Busca al alumno
+//     auto iter = std::find_if(list_student.begin(), list_student.end(), verify_student);
+//     // Verifica que exista y si existe lo borra
+//     if (iter != list_student.end()) {
+//         delete *iter;               // Borrar el alumno
+//         list_student.erase(iter);   // Borrar la referencia del vector
+//     }
+// }
+
 void Section::retire(const std::string &id_student) {
+    // Busca al alumno
+    for (auto it = list_student.begin(); it != list_student.end(); ++it) {
+        if ((*it)->get_id() == id_student) {
+            delete *it;
+            list_student.erase(it);
+        }
+    }
 }
 
+
 void Section::show_list() {
+    std::cout << "curso: " << course->get_id() << "-" << course->get_name() << std::endl;
+    std::cout << std::string(40,'-') << std::endl;
+    for (const auto& student : list_student) {
+        std::cout << student->get_id() << " " << student->get_name() << std::endl;
+    }
+    std::cout << std::string(40,'-') << std::endl;
 }
 
 std::string Section::get_id() {
+    return id;
 }
 
 Professor & Section::get_professor() {
+    return *professor;
 }
 
 Course & Section::get_course() {
+    return *course;
 }
 
 Laboratory & Section::get_laboratory() {
+    return *laboratory;
 }
